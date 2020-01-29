@@ -29,24 +29,10 @@ public class RepoViewModel extends AndroidViewModel {
 
     public Observable<List<RepoResult>> getMyRepo(String userName) {
         return retrofitInstance.getRepoInstance( userName ).subscribeOn( Schedulers.io() ).observeOn( AndroidSchedulers.mainThread() );
-
     }
 
     public Observable<List<CommitsResult>> getMyCommits(String repository) {
         //User name hardcoded as Global variable for testing puproses.
         return retrofitInstance.getCommitInstance( userName, repository ).subscribeOn( Schedulers.io() ).observeOn( AndroidSchedulers.mainThread() );
-
-    }
-
-    public MutableLiveData<RepoResult> getRepoLiveData() {
-
-        return repoLiveData;
-
-    }
-
-    public MutableLiveData<CommitsResult> getCommitsLiveData() {
-
-        return commitsLiveData;
-
     }
 }

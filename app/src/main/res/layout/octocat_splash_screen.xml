@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/light_bg">
+    android:background="@drawable/purple_bg">
 
     <ImageView
         android:id="@+id/octocat_imageview"
@@ -16,14 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <ImageView
-        android:id="@+id/leaf_stand_imageview"
-        android:layout_width="108dp"
-        android:layout_height="108dp"
-        android:paddingTop="56dp"
-        android:src="@drawable/cat_shadow"
+        android:id="@+id/cat_shadow_stand"
+        android:layout_width="244dp"
+        android:layout_height="244dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="124dp"
+        android:src="@drawable/cat_shadow_stand"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/logo_textview"/>
+        app:layout_constraintBottom_toTopOf="@id/get_started_button"/>
 
     <TextView
         android:id="@+id/logo_textview2"
@@ -64,5 +65,14 @@
         app:srcCompat="@drawable/get_started_btn"
         android:contentDescription="This starts the application"
         android:focusable="true" />
+
+    <FrameLayout
+        android:id="@+id/login_frame_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.octocat_imageview)
     ImageView octocatImg;
 
-    @BindView(R.id.leaf_stand_imageview)
+    @BindView(R.id.cat_shadow_stand)
     ImageView leafyStand;
 
     @BindView(R.id.get_started_button)
