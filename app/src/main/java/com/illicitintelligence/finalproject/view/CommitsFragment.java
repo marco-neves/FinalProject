@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.CommitAdapter;
 import com.illicitintelligence.finalproject.model.CommitsResult;
+import com.illicitintelligence.finalproject.util.Util;
 import com.illicitintelligence.finalproject.viewmodel.RepoViewModel;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class CommitsFragment extends Fragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private RepoViewModel repoViewModel;
+    private String repoTitle;
 
     @Nullable
     @Override
@@ -43,8 +45,12 @@ public class CommitsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+
+        Bundle argumentBundle = getArguments();
+        repoTitle = argumentBundle.getString(Util.REPO_KEY);
+
         repoViewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
-        getMyCommits();
+        getMyCommits(repoTitle);
     }
 
     private void setRV(List<CommitsResult> commitsResults) {
@@ -54,8 +60,8 @@ public class CommitsFragment extends Fragment {
 
     }
 
-    private void getMyCommits() {
-        compositeDisposable.add( repoViewModel.getMyCommits( "HW3" ).subscribe(
+    private void getMyCommits(String repoTitle) {
+        compositeDisposable.add( repoViewModel.getMyCommits( repoTitle ).subscribe(
                 new Consumer<List<CommitsResult>>() {
                     @Override
                     public void accept(List<CommitsResult> repoResults) throws Exception {
