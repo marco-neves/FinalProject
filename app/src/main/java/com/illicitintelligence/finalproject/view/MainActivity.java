@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private static final String TAG = "MainActivity";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private RepoViewModel viewModel;
+    private CommitsFragment commitsFragment = new CommitsFragment();
 
     ArrayList<String> users = new ArrayList<String>() {{
         add("GermL");
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.delete_user_constraintLayout)
     ConstraintLayout deleteUserConstraintLayout;
 
+    @BindView(R.id.commit_framelayout)
+    FrameLayout commits_fragment_layout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,26 +95,15 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @Override
     public void clickRepo(String repo) {
         Toast.makeText(this, repo+"clicked", Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.commit_framelayout, commitsFragment)
+                .addToBackStack(commitsFragment.getTag())
+                .commit();
+
         //TODO move to next fragment
     }
 
-    private void getMyCommits() {
-        compositeDisposable.add( viewModel.getMyCommits( "HW3" ).subscribe(
-                new Consumer<List<CommitsResult>>() {
-                    @Override
-                    public void accept(List<CommitsResult> repoResults) throws Exception {
-
-
-                        for (int i = 0; i < repoResults.size(); i++) {
-                            Log.d( TAG, "Commits: " + repoResults.get( i ).getCommit().getMessage() );
-                        }
-
-
-                    }
-                }
-                )
-        );
-    }
 
     private void getRepositories(String user) {
         compositeDisposable.add( viewModel.getMyRepo( user ).subscribe(
