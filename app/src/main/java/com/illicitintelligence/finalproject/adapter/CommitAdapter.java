@@ -1,5 +1,6 @@
 package com.illicitintelligence.finalproject.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.model.Commit;
 import com.illicitintelligence.finalproject.model.CommitsResult;
+import com.illicitintelligence.finalproject.view.CommitsFragment;
 
 import java.util.List;
 
 public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitViewHolder>{
     private List<CommitsResult> commits;
+
+
+    public CommitAdapter(List<CommitsResult> commits) {
+        this.commits = commits;
+    }
 
     @NonNull
     @Override
@@ -28,7 +35,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
     @Override
     public void onBindViewHolder(@NonNull CommitViewHolder holder, int position) {
-        //holder.commitTextView.setText(commits.get(position).);
+        holder.commitTextView.setText(commits.get(position).getCommit().getMessage());
     }
 
     @Override
