@@ -19,6 +19,7 @@ import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
 import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.model.RepoResult;
+import com.illicitintelligence.finalproject.util.Util;
 import com.illicitintelligence.finalproject.viewmodel.RepoViewModel;
 
 import java.util.ArrayList;
@@ -95,13 +96,17 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @Override
     public void clickRepo(String repo) {
         Toast.makeText(this, repo+"clicked", Toast.LENGTH_SHORT).show();
+
+        Bundle repoBundle = new Bundle();
+        repoBundle.putString(Util.REPO_KEY, repo);
+        commitsFragment.setArguments(repoBundle);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
 
-        //TODO move to next fragment
     }
 
 
