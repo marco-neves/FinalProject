@@ -2,7 +2,7 @@ package com.illicitintelligence.finalproject.network;
 
 import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.model.RepoResult;
-import com.illicitintelligence.finalproject.util.Util;
+import com.illicitintelligence.finalproject.util.Constants;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
 
-    private final String BASE_URL = Util.BASE_URL;
+    private final String BASE_URL = Constants.BASE_URL;
     private GitHubService service;
 
     public RetrofitInstance() {

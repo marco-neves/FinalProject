@@ -29,12 +29,12 @@
         android:id="@+id/logo_textview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cactcles_text"
+        android:text="@string/cactacles_text"
         android:paddingTop="20dp"
         android:layout_marginStart="2dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#F0951C"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/octocat_imageview"/>
@@ -43,11 +43,11 @@
         android:id="@+id/logo_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cactcles_text"
+        android:text="@string/cactacles_text"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
         android:textSize="32sp"
-        android:textColor="@color/pendulum_color2"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/octocat_imageview"/>
@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/get_started_btn"
-        android:contentDescription="@string/starts_the_application_text"
+        android:contentDescription="This starts the application"
         android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

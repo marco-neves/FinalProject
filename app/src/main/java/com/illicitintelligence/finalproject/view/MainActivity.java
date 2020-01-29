@@ -2,7 +2,6 @@ package com.illicitintelligence.finalproject.view;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -17,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
-import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.model.RepoResult;
-import com.illicitintelligence.finalproject.util.Util;
+import com.illicitintelligence.finalproject.util.Constants;
 import com.illicitintelligence.finalproject.viewmodel.RepoViewModel;
 
 import java.util.ArrayList;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         Toast.makeText(this, repo+"clicked", Toast.LENGTH_SHORT).show();
 
         Bundle repoBundle = new Bundle();
-        repoBundle.putString(Util.REPO_KEY, repo);
+        repoBundle.putString(Constants.REPO_KEY, repo);
         commitsFragment.setArguments(repoBundle);
 
         getSupportFragmentManager()

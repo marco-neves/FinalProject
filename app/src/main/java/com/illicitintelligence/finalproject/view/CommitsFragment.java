@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.CommitAdapter;
 import com.illicitintelligence.finalproject.model.CommitsResult;
-import com.illicitintelligence.finalproject.util.Util;
+import com.illicitintelligence.finalproject.util.Constants;
 import com.illicitintelligence.finalproject.viewmodel.RepoViewModel;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class CommitsFragment extends Fragment {
         ButterKnife.bind(this,view);
 
         Bundle argumentBundle = getArguments();
-        repoTitle = argumentBundle.getString(Util.REPO_KEY);
+        repoTitle = argumentBundle.getString(Constants.REPO_KEY);
 
         repoViewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         getMyCommits(repoTitle);
