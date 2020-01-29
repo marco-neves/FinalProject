@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Final Project</string>
+    <string name="commits_txt">Commits</string>
+    <string name="repos_txt">Repos</string>
+    <string name="password_txt">password</string>
+    <string name="signup_txt">SignUp</string>
+    <string name="cactacles_text">CACTACLES</string>
+    <string name="login_txt">Login</string>
+    <string name="github_name_txt">github name</string>
+    <string name="verify_password_txt">verify password</string>
+    <string name="delete_user_txt">Delete User</string>
+    <string name="add_user_txt">Add User</string>
+    <string name="user_name_txt">User Name</string>
+    <string name="close_button_txt">close Button</string>
 </resources>
