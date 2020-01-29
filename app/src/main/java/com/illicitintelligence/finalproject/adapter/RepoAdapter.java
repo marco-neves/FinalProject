@@ -20,7 +20,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
     @Override
     public RepoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.project_item_layout, parent, false);
+                .inflate(R.layout.repo_item_layout, parent, false);
 
         return new RepoViewHolder(view);
     }

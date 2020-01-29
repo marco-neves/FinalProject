@@ -26,18 +26,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.repo_activity_layout);
         viewModel = ViewModelProviders.of( this ).get( RepoViewModel.class );
-
 
         getRepositories();
 
         getMyCommits();
-
-=======
-        setContentView(R.layout.repo_activity_layout);
->>>>>>> 12ad4fa01b99b2f469a8cd89a11068e187855fac
     }
 
     private void getMyCommits() {
