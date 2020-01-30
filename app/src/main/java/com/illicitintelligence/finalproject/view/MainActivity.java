@@ -3,7 +3,6 @@ package com.illicitintelligence.finalproject.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -27,6 +26,7 @@ import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
 import com.illicitintelligence.finalproject.model.RepoResult;
 import com.illicitintelligence.finalproject.util.Constants;
+import com.illicitintelligence.finalproject.util.Logger;
 import com.illicitintelligence.finalproject.viewmodel.RepoViewModel;
 
 import java.util.ArrayList;
@@ -35,7 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener{
 
@@ -81,11 +80,28 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     FrameLayout commits_fragment_layout;
 
 //  @BindView(R.id.drawer)
-    DrawerLayout drawerLayout;
 
-    Toolbar toolbar;
-    NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
+    private StringBuilder sb = new StringBuilder();
+    private String tempUsers;
+    private SharedPreferences userSharedPref;
+    private SharedPreferences.Editor editor;
+
+    public void saveToSharedPreference(String key, String users) {
+        editor = userSharedPref.edit();
+        editor.putString(key, users);
+        editor.apply();
+    }
+
+    // this method is to be called if we're within 24hr of the last api call
+    public String fetchFromSharedPreference(String key) {
+        if(userSharedPref.contains(key))
+            return "";
+        return userSharedPref.getString(key, getString(R.string.default_user_value));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,18 +110,16 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         ButterKnife.bind(this);
 
         setUpToolbar();
-        setUpNavigationView();
-        setUpDrawer();
 
-        for (int i = 0; i < users.size() ; i++) {
+        userSharedPref = this.getSharedPreferences(Constants.USERNAME_SHARED_PREFS, Context.MODE_PRIVATE);
 
+        if (!userSharedPref.contains(Constants.USER_PREF_KEY)) {
+            translateArrayList();
         }
-
-//
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        //editor.putInt(getString(R.string.saved_high_score_key), newHighScore);
-//        editor.commit();
+        else {
+            tempUsers = fetchFromSharedPreference(Constants.USER_PREF_KEY);
+            populateMenuOptions(tempUsers);
+        }
 
         //TODO ADD LOGIN IMPLEMENTATION
 
@@ -115,22 +129,10 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         getRepositories(currentUser);
     }
 
-    private void addMenuItemInNavMenuDrawer() {
-        Menu menu = navigationView.getMenu();
-        Menu submenu = menu.addSubMenu("New Super SubMenu");
-
-        submenu.add("Super Item1");
-        submenu.add("Super Item2");
-        submenu.add("Super Item3");
-
-        navigationView.invalidate();
-    }
-
     private void setUpToolbar() {
-        Log.d("TAG_X", " 1: " + getSupportActionBar());
         toolbar = findViewById(R.id.my_custom_toolbar);
         setSupportActionBar(toolbar);
-        Log.d("TAG_X", " 2: " + getSupportActionBar());
+        setUpNavigationView();
     }
 
     //set up the "homepage" navigation view
@@ -138,9 +140,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         navigationView = findViewById(R.id.navi_view);
 
         // TODO: here we have to make sure we already dynamically add in the users.
-        addMenuItemInNavMenuDrawer();
         navigationView.setNavigationItemSelectedListener(this);
-
+        setUpDrawer();
     }
 
     private void setUpDrawer() {
@@ -151,11 +152,25 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         toggle.syncState();
     }
 
+    private void translateArrayList() {
+        //TODO: check if the sharepreferences is null
+        for (int i = 0; i < users.size() ; i++) {
+            //TODO: add users from arrayList to sharedpreferences
+            sb.append(users.get(i)).append(",");
+        }
+        tempUsers = sb.toString();
+
+        saveToSharedPreference(Constants.USER_PREF_KEY, tempUsers);
+        Logger.logIt(tempUsers);
+
+        // TODO: Before populating the menu list we need to check if it's
+        populateMenuOptions(tempUsers);
+    }
+
     private void setRV(List<RepoResult> repoResults){
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
         repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
-
     }
 
     @Override
@@ -172,26 +187,43 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
-
     }
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
         },throwable -> {
-            Log.d("TAG_X", "getRepositories: "+throwable.getMessage());
+            Logger.logIt(""+throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
-
     }
 
+    public void populateMenuOptions(String myUsers){
+        Menu menu = navigationView.getMenu();
+        Menu submenu = menu.addSubMenu("Current Users:");
 
+        // reference the names in sharedpreferences
+        String[] userList = myUsers.split(",");
+
+        // reference the names in sharedpreferences
+        for(String user: userList){
+            submenu.add(user);
+            Logger.logIt("Added User: " + user);
+        }
+
+        navigationView.invalidate();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Logger.logIt("MenuItem: " + item.toString());
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //TODO: refresh the UI based on the user selected.
-
-
-
         return false;
     }
 }

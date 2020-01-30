@@ -72,6 +72,10 @@ public class CommitsFragment extends Fragment {
     private void getMyCommits(String userName, String repoTitle) {
         compositeDisposable.add( repoViewModel.getMyCommits( userName, repoTitle ).subscribe(commitsResults -> {
            setRV(commitsResults);
+
+           // TODO: Check >>24hr<< and if yes: reference sharedPrefs (caching)
+            // if no, fetch the commits again and then cache
+
             Toast.makeText(this.getContext(), "Commits Found", Toast.LENGTH_SHORT).show();
         }, throwable -> {
             Toast.makeText(this.getContext(), "No Commits Found for " + repoTitle, Toast.LENGTH_SHORT).show();

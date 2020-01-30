@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.util.Constants;
+import com.illicitintelligence.finalproject.util.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,7 +55,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
         }catch(Exception e){
             holder.commitAuthorTextView.setText("User");
-            Log.d("TAG_X", "onBindViewHolder: "+e.getMessage());
+            Logger.logIt("onBindViewHolder: "+e.getMessage());
         }
 
         try{
@@ -67,7 +68,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(Constants.DEFAULT_ICON)
                     .into(holder.commitAvatarImageView);
-            Log.d("TAG_X", "onBindViewHolder: "+e.getMessage());
+            Logger.logIt("onBindViewHolder: "+e.getMessage());
         }
 
         //compareDates(commits.get(position).getCommit().getCommitter().getDate());
@@ -86,13 +87,13 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
         String currentDateTime[] = currentDateString.split("T");
 
-        Log.d("TAG_X", "compareDates: "+format.format(currentDate)+ ", "+commitTime);
+        Logger.logIt("compareDates: "+format.format(currentDate)+ ", "+commitTime);
 
 
         try {
             Date commitDate = new Date();
             currentDate = format.parse(format.format(currentDate));
-            Log.d("TAG_X", "compareDates2: "+ currentDate);
+            Logger.logIt("compareDates2: "+ currentDate);
             long diff = currentDate.getTime() - commitDate.getTime();
 
             long diffSeconds = diff / 1000 % 60;
@@ -100,12 +101,11 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
             long diffHours = diff / (60 * 60 * 1000) % 24;
             long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            Log.d("TAG_X", "compareDates: "+diffDays+ " days and "+diffHours+" hours ago");
+            Logger.logIt("compareDates: "+diffDays+ " days and "+diffHours+" hours ago");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
