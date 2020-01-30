@@ -6,55 +6,68 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
     app:cardBackgroundColor="@color/colorPrimary">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="156dp"
-        >
+        android:layout_height="156dp">
 
-    <TextView
-        android:id="@+id/repo_title_textview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="left"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeMaxTextSize="32sp"
-        style="@style/RepoLayoutFontStyle"
-        android:layout_marginStart="8dp"
-        app:layout_constraintHorizontal_weight=".8"
-        app:layout_constraintEnd_toStartOf="@+id/repo_laguage_textview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Project Title" />
+        <TextView
+            android:id="@+id/repo_title_textview"
+            style="@style/RepoLayoutFontStyle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="8dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/spacemono_bold"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/repo_url_textview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_laguage_textview"
+            tools:text="Project Title" />
 
-    <TextView
-        android:id="@+id/repo_laguage_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        app:layout_constraintHorizontal_weight=".2"
-        android:textSize="24sp"
-        style="@style/RepoLayoutFontStyle"
-        android:layout_margin="16dp"
-        android:textStyle="bold|italic"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Kotlin" />
+        <TextView
+            android:id="@+id/repo_laguage_textview"
+            style="@style/RepoLayoutFontStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="left"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Kotlin" />
 
-    <TextView
-        android:id="@+id/repo_url_textview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        style="@style/RepoLayoutFontStyle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repo_title_textview"
-        tools:text="http://thisisasamplewebsite.com/users/temp/temprepo" />
+        <TextView
+            android:id="@+id/repo_date_textview"
+            style="@style/RepoLayoutFontStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/spacemono_italic"
+            android:gravity="left"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="12/24/2019"/>
+
+        <TextView
+            android:id="@+id/repo_url_textview"
+            android:textColor="#21618C"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_title_textview"
+            tools:text="http://thisisasamplewebsite.com/users/temp/temprepo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

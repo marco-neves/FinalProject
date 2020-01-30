@@ -48,7 +48,15 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
         holder.repoLanguageTextView.setText(repoResults.get(position).getLanguage());
         holder.repoURLTextView.setText(repoResults.get(position).getHtmlUrl());
 
+        String dateTime = repoResults.get(position).getUpdatedAt();
+        String date[] = dateTime.split("T");
+        String dateFormat[] = date[0].split("-");
+        holder.repoDateTextView.setText(dateFormat[1] + "/" + dateFormat[2] + "/" + dateFormat[0]);
+
         String title = repoResults.get(position).getName();
+//        if(title.length() > 19)
+//            holder.repoTitleTextView.setTextSize(16f);
+
 
         holder.repoTitleTextView.setText(title);
 
@@ -74,12 +82,14 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
         TextView repoTitleTextView;
         TextView repoLanguageTextView;
         TextView repoURLTextView;
+        TextView repoDateTextView;
 
         public RepoViewHolder(@NonNull View itemView) {
             super(itemView);
             repoTitleTextView = itemView.findViewById(R.id.repo_title_textview);
             repoLanguageTextView = itemView.findViewById(R.id.repo_laguage_textview);
             repoURLTextView = itemView.findViewById(R.id.repo_url_textview);
+            repoDateTextView = itemView.findViewById(R.id.repo_date_textview);
         }
     }
 }

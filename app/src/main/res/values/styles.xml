@@ -35,7 +35,7 @@
     </style>
 
     <style name="RepoLayoutFontStyle">
-        <item name="android:textColor">#B2F5F4F4</item>
+        <item name="android:textColor">@color/bright_white</item>
     </style>
 
 </resources>

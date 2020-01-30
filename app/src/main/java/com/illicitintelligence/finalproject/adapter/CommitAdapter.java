@@ -50,14 +50,16 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
     public void onBindViewHolder(@NonNull CommitViewHolder holder, int position) {
         String message = commits.get(position).getCommit().getMessage();
 
-        if(message.length() > 24)
+        if(message.length() > 26)
+            holder.commitTitleTextView.setTextSize(12f);
+        if(message.length() > 19)
             holder.commitTitleTextView.setTextSize(16f);
 
         holder.commitTitleTextView.setText(message);
 
 
         try{
-            holder.commitAuthorTextView.setText(commits.get(position).getCommitter().getLogin());
+            holder.commitAuthorTextView.setText(commits.get(position).getAuthor().getLogin());
             //commits.get(position).getAuthor().getLogin()
 
         }catch(Exception e){
@@ -68,7 +70,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         try{
             Glide.with(context)
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
-                    .load(commits.get(position).getCommitter().getAvatarUrl())
+                    .load(commits.get(position).getAuthor().getAvatarUrl())
                     .into(holder.commitAvatarImageView);
         }catch (Exception e){
             Glide.with(context)
