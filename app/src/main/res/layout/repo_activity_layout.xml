@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#4D2059"
     tools:context=".view.MainActivity">
-
     <FrameLayout
         android:id="@+id/commit_framelayout"
         android:layout_width="match_parent"

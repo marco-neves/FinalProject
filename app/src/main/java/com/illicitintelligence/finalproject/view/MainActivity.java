@@ -21,6 +21,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
@@ -35,8 +37,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 
-public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -50,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         add("moniqueberry88");
     }};
 
-    private String currentUser="";
+    private String currentUser = "";
+    private String avatarUrl = "";
 
     @BindView(R.id.recyclerView_repos)
     RecyclerView repoRecyclerView;
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     FrameLayout commits_fragment_layout;
 
 //  @BindView(R.id.drawer)
-
+    ImageView drawerAvatar;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -124,12 +128,30 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         //TODO ADD LOGIN IMPLEMENTATION
 
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
-        currentUser= users.get(3);
+        currentUser = users.get(3);
 
         getRepositories(currentUser);
     }
 
+    private void setAvatar() {
+        //TODO: set the avatar
+        //curently has an error where the drawer id is null
+        try {
+            Glide.with(this)
+                    .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                    .load(avatarUrl)
+                    .into(drawerAvatar);
+        } catch (Exception e) {
+            Glide.with(this)
+                    .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                    .load(Constants.DEFAULT_ICON)
+                    .into(drawerAvatar);
+            Logger.logIt("onBindViewHolder: " + e.getMessage());
+        }
+    }
+
     private void setUpToolbar() {
+        Logger.logIt(" 1: " + getSupportActionBar());
         toolbar = findViewById(R.id.my_custom_toolbar);
         setSupportActionBar(toolbar);
         setUpNavigationView();
@@ -140,18 +162,22 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         navigationView = findViewById(R.id.navi_view);
 
         // TODO: here we have to make sure we already dynamically add in the users.
+
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
 
     private void setUpDrawer() {
         drawerLayout = findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        drawerAvatar = findViewById(R.id.drawer_imageView);
+        //setAvatar();// for use with setting avatar
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
-    }
 
+    }
     private void translateArrayList() {
         //TODO: check if the sharepreferences is null
         for (int i = 0; i < users.size() ; i++) {
@@ -166,16 +192,16 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         // TODO: Before populating the menu list we need to check if it's
         populateMenuOptions(tempUsers);
     }
-
-    private void setRV(List<RepoResult> repoResults){
+    private void setRV(List<RepoResult> repoResults) {
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
         repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
+
     }
 
     @Override
     public void clickRepo(String repo) {
-        Toast.makeText(this, repo+"clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, repo + "clicked", Toast.LENGTH_SHORT).show();
 
         Bundle repoBundle = new Bundle();
         repoBundle.putString(Constants.REPO_KEY, repo);
@@ -187,12 +213,14 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
+
     }
+
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
         },throwable -> {
-            Logger.logIt(""+throwable.getMessage());
+            Logger.logIt("getRepositories: "+throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
     }
@@ -209,13 +237,11 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             submenu.add(user);
             Logger.logIt("Added User: " + user);
         }
-
         navigationView.invalidate();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         Logger.logIt("MenuItem: " + item.toString());
 
         return super.onOptionsItemSelected(item);
