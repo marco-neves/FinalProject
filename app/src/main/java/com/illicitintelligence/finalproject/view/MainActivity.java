@@ -2,18 +2,24 @@ package com.illicitintelligence.finalproject.view;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
 import com.illicitintelligence.finalproject.model.RepoResult;
@@ -28,7 +34,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
-public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate{
+public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener{
 
     private static final String TAG = "MainActivity";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -69,13 +75,22 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.commit_framelayout)
     FrameLayout commits_fragment_layout;
 
+//  @BindView(R.id.drawer)
+    DrawerLayout drawerLayout;
+
+    Toolbar toolbar;
+    NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.repo_activity_layout);
-
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        setUpToolbar();
+        setUpNavigationView();
+        setUpDrawer();
 
         //TODO ADD LOGIN IMPLEMENTATION
 
@@ -84,11 +99,34 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         //getMyCommits();
     }
 
+    private void setUpToolbar() {
+        Log.d("TAG_X", " 1: " + getSupportActionBar());
+        toolbar = findViewById(R.id.my_custom_toolbar);
+        setSupportActionBar(toolbar);
+        Log.d("TAG_X", " 2: " + getSupportActionBar());
+    }
+
+    //set up the "homepage" navigation view
+    private void setUpNavigationView() {
+        navigationView = findViewById(R.id.navi_view);
+
+        // TODO: here we have to make sure we already dynamically add in the users.
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setUpDrawer() {
+        drawerLayout = findViewById(R.id.drawer);
+        toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(true);
+        toggle.syncState();
+    }
+
     private void setRV(List<RepoResult> repoResults){
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
         repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
-
     }
 
     @Override
@@ -104,9 +142,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
-
     }
-
 
     private void getRepositories(String user) {
         compositeDisposable.add( viewModel.getMyRepo( user ).subscribe(
@@ -117,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                         for (int i = 0; i < repoResults.size(); i++) {
                             Log.d( TAG, "repo: " + repoResults.get( i ).getName() );
                         }
-
                         setRV(repoResults);
                     }
                 }
@@ -125,4 +160,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         );
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //TODO: refresh the UI based on the user selected.
+        return false;
+    }
 }

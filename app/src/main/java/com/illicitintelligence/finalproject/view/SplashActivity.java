@@ -75,7 +75,7 @@ public class SplashActivity extends AppCompatActivity {
         darkoFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_darkat);
 
         // Bouncing animation
-        bouncer.setDuration(4000);
+        bouncer.setDuration(2000);
         octocatImg.setAnimation(bouncer);
         logoTextView.setAnimation(bouncer);
 
