@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.commit_framelayout)
     FrameLayout commits_fragment_layout;
 
-//  @BindView(R.id.drawer)
     ImageView drawerAvatar;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -146,12 +145,10 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(Constants.DEFAULT_ICON)
                     .into(drawerAvatar);
-            Logger.logIt("onBindViewHolder: " + e.getMessage());
         }
     }
 
     private void setUpToolbar() {
-        Logger.logIt(" 1: " + getSupportActionBar());
         toolbar = findViewById(R.id.my_custom_toolbar);
         setSupportActionBar(toolbar);
         setUpNavigationView();
@@ -219,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
-        },throwable -> {
-            Logger.logIt("getRepositories: "+throwable.getMessage());
+        }, throwable -> {
+            Logger.logIt(""+throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
     }
@@ -237,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             submenu.add(user);
             Logger.logIt("Added User: " + user);
         }
+
         navigationView.invalidate();
     }
 
