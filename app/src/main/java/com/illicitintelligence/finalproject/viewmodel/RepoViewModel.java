@@ -19,10 +19,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RepoViewModel extends AndroidViewModel {
 
-    private RetrofitInstance retrofitInstance = new RetrofitInstance();
+    private RetrofitInstance retrofitInstance;
 
     public RepoViewModel(@NonNull Application application) {
         super( application );
+        retrofitInstance = new RetrofitInstance(this.getApplication().getCacheDir());
     }
 
     public Observable<List<RepoResult>> getMyRepo(String userName) {
