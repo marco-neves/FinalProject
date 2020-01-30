@@ -37,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
@@ -83,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     FrameLayout commits_fragment_layout;
 
     ImageView drawerAvatar;
-    DrawerLayout drawerLayout;
-
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -146,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(Constants.DEFAULT_ICON)
                     .into(drawerAvatar);
-            Log.d("TAG_X", "onBindViewHolder: " + e.getMessage());
         }
     }
 
@@ -161,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         navigationView = findViewById(R.id.navi_view);
 
         // TODO: here we have to make sure we already dynamically add in the users.
+
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
@@ -193,7 +192,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private void setRV(List<RepoResult> repoResults) {
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
-        repoRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
+
     }
 
     @Override
@@ -210,13 +210,14 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
+
     }
 
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
-        },throwable -> {
-            Log.d("TAG_X", "getRepositories: " + throwable.getMessage());
+        }, throwable -> {
+            Logger.logIt(""+throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
     }

@@ -93,6 +93,9 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         String commitDateTime[] = commitTimeFull.split("T");
         String currentDateTime[] = currentDateString.split("T");
 
+        String commitDate[] = commitDateTime[0].split("-");
+        String currentDate[] = currentDateTime[0].split("-");
+
         String commitTime[] = commitDateTime[1].split(":");
         String currentTime[] = currentDateTime[1].split(":");
 
@@ -101,8 +104,6 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         int diffDay = (Integer.parseInt(currentDate[2]) - Integer.parseInt(commitDate[2]));
 
         int diffHour = (Integer.parseInt(currentTime[0]) - Integer.parseInt(commitTime[0]));
-
-        Logger.logIt("compareDates: "+diffDays+ " days and "+diffHours+" hours ago");
 
         int diffTotal = (diffYear*8760) + (diffMonth*730) + (diffDay*24) +diffHour;
 
