@@ -20,8 +20,6 @@ public class RepoViewModel extends AndroidViewModel {
 
     private RetrofitInstance retrofitInstance = new RetrofitInstance();
     private String userName = "Germl";
-    private MutableLiveData<RepoResult> repoLiveData = new MutableLiveData<>();
-    private MutableLiveData<CommitsResult> commitsLiveData = new MutableLiveData<>();
 
     public RepoViewModel(@NonNull Application application) {
         super( application );
