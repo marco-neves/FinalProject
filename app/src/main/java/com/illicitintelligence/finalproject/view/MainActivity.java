@@ -1,7 +1,10 @@
 package com.illicitintelligence.finalproject.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,12 +97,33 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setUpNavigationView();
         setUpDrawer();
 
+        for (int i = 0; i < users.size() ; i++) {
+
+        }
+
+//
+//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        //editor.putInt(getString(R.string.saved_high_score_key), newHighScore);
+//        editor.commit();
+
         //TODO ADD LOGIN IMPLEMENTATION
 
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         currentUser= users.get(3);
 
         getRepositories(currentUser);
+    }
+
+    private void addMenuItemInNavMenuDrawer() {
+        Menu menu = navigationView.getMenu();
+        Menu submenu = menu.addSubMenu("New Super SubMenu");
+
+        submenu.add("Super Item1");
+        submenu.add("Super Item2");
+        submenu.add("Super Item3");
+
+        navigationView.invalidate();
     }
 
     private void setUpToolbar() {
@@ -114,8 +138,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         navigationView = findViewById(R.id.navi_view);
 
         // TODO: here we have to make sure we already dynamically add in the users.
-
+        addMenuItemInNavMenuDrawer();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     private void setUpDrawer() {
@@ -164,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //TODO: refresh the UI based on the user selected.
+
+
+
         return false;
     }
 }
