@@ -56,7 +56,7 @@ public class CommitsFragment extends Fragment {
         repoTitle = argumentBundle.getString(Constants.REPO_KEY);
         currentAuthor = argumentBundle.getString(Constants.AUTHOR_KEY);
 
-        commitsTextView.setText(repoTitle + getString(R.string.commits_txt));
+        commitsTextView.setText(repoTitle +  " Commits");
 
         repoViewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         getMyCommits(currentAuthor, repoTitle);
