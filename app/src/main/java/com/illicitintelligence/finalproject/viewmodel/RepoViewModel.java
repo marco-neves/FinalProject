@@ -27,7 +27,7 @@ public class RepoViewModel extends AndroidViewModel {
     }
 
     public Observable<List<RepoResult>> getMyRepo(String userName) {
-        //Log.d("TAG_X", "getMyRepo: " + userName);
+        //Logger.logError("TAG_X", "getMyRepo: " + userName);
         return retrofitInstance.getRepoInstance( userName )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() );

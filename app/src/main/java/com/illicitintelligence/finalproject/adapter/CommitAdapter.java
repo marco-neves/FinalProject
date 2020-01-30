@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.util.Constants;
+import com.illicitintelligence.finalproject.util.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,7 +62,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
         }catch(Exception e){
             holder.commitAuthorTextView.setText("User");
-            Log.d("TAG_X", "onBindViewHolder: "+e.getMessage());
+            Logger.logIt("onBindViewHolder: "+e.getMessage());
         }
 
         try{
@@ -74,7 +75,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(Constants.DEFAULT_ICON)
                     .into(holder.commitAvatarImageView);
-            Log.d("TAG_X", "onBindViewHolder: "+e.getMessage());
+            Logger.logIt("onBindViewHolder: "+e.getMessage());
         }
 
         holder.commitDateTextView.setText(compareDates(commits.get(position).getCommit().getCommitter().getDate()) + " hours ago");
@@ -92,9 +93,6 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         String commitDateTime[] = commitTimeFull.split("T");
         String currentDateTime[] = currentDateString.split("T");
 
-        String commitDate[] = commitDateTime[0].split("-");
-        String currentDate[] = currentDateTime[0].split("-");
-
         String commitTime[] = commitDateTime[1].split(":");
         String currentTime[] = currentDateTime[1].split(":");
 
@@ -103,6 +101,8 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         int diffDay = (Integer.parseInt(currentDate[2]) - Integer.parseInt(commitDate[2]));
 
         int diffHour = (Integer.parseInt(currentTime[0]) - Integer.parseInt(commitTime[0]));
+
+        Logger.logIt("compareDates: "+diffDays+ " days and "+diffHours+" hours ago");
 
         int diffTotal = (diffYear*8760) + (diffMonth*730) + (diffDay*24) +diffHour;
 
