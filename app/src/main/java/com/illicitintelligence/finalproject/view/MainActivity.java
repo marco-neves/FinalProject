@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         add("moniqueberry88");
     }};
 
+    private String currentUser="";
+
     @BindView(R.id.recyclerView_repos)
     RecyclerView repoRecyclerView;
 
@@ -94,9 +96,10 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
         //TODO ADD LOGIN IMPLEMENTATION
 
-        viewModel = ViewModelProviders.of( this ).get( RepoViewModel.class );
-        getRepositories(users.get(0));
-        //getMyCommits();
+        viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
+        currentUser= users.get(3);
+
+        getRepositories(currentUser);
     }
 
     private void setUpToolbar() {
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
         repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
+
     }
 
     @Override
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
         Bundle repoBundle = new Bundle();
         repoBundle.putString(Constants.REPO_KEY, repo);
+        repoBundle.putString(Constants.AUTHOR_KEY, currentUser);
         commitsFragment.setArguments(repoBundle);
 
         getSupportFragmentManager()
@@ -142,23 +147,19 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
-    }
 
+    }
     private void getRepositories(String user) {
-        compositeDisposable.add( viewModel.getMyRepo( user ).subscribe(
-                new Consumer<List<RepoResult>>() {
-                    @Override
-                    public void accept(List<RepoResult> repoResults) throws Exception {
+        compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
+            setRV(repoResults);
+        },throwable -> {
+            Log.d("TAG_X", "getRepositories: "+throwable.getMessage());
+            Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
+        }));
 
-                        for (int i = 0; i < repoResults.size(); i++) {
-                            Log.d( TAG, "repo: " + repoResults.get( i ).getName() );
-                        }
-                        setRV(repoResults);
-                    }
-                }
-                )
-        );
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

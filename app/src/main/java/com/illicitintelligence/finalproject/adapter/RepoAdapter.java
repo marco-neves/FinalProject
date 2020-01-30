@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.model.RepoResult;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder>{
@@ -37,7 +39,9 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RepoViewHolder holder, int position) {
-        holder.projectTitleTextview.setText(repoResults.get(position).getName());
+        holder.repoTitleTextView.setText(repoResults.get(position).getName());
+        holder.repoLanguageTextView.setText(repoResults.get(position).getLanguage());
+        holder.repoURLTextView.setText(repoResults.get(position).getHtmlUrl());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,11 +57,15 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
     }
 
     class RepoViewHolder extends RecyclerView.ViewHolder {
-        TextView projectTitleTextview;
+        TextView repoTitleTextView;
+        TextView repoLanguageTextView;
+        TextView repoURLTextView;
+
         public RepoViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            projectTitleTextview = itemView.findViewById(R.id.project_title_textview);
+            repoTitleTextView = itemView.findViewById(R.id.repo_title_textview);
+            repoLanguageTextView = itemView.findViewById(R.id.repo_laguage_textview);
+            repoURLTextView = itemView.findViewById(R.id.repo_url_textview);
         }
     }
 }
