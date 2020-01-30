@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.illicitintelligence.finalproject.R;
 import com.illicitintelligence.finalproject.adapter.RepoAdapter;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
-public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         add("moniqueberry88");
     }};
 
-    private String currentUser="";
+    private String currentUser = "";
+    private String avatarUrl = "";
 
     @BindView(R.id.recyclerView_repos)
     RecyclerView repoRecyclerView;
@@ -77,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.commit_framelayout)
     FrameLayout commits_fragment_layout;
 
-//  @BindView(R.id.drawer)
+    ImageView drawerAvatar;
+
+    //  @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
 
     Toolbar toolbar;
@@ -97,16 +102,33 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         //TODO ADD LOGIN IMPLEMENTATION
 
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
-        currentUser= users.get(3);
+        currentUser = users.get(3);
 
         getRepositories(currentUser);
     }
 
+    private void setAvatar() {
+        //TODO: set the avatar
+        //curently has an error where the drawer id is null
+        try {
+            Glide.with(this)
+                    .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                    .load(avatarUrl)
+                    .into(drawerAvatar);
+        } catch (Exception e) {
+            Glide.with(this)
+                    .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                    .load(Constants.DEFAULT_ICON)
+                    .into(drawerAvatar);
+            Log.d("TAG_X", "onBindViewHolder: " + e.getMessage());
+        }
+    }
+
     private void setUpToolbar() {
-        Log.d("TAG_X", " 1: " + getSupportActionBar());
+        //Log.d("TAG_X", " 1: " + getSupportActionBar());
         toolbar = findViewById(R.id.my_custom_toolbar);
         setSupportActionBar(toolbar);
-        Log.d("TAG_X", " 2: " + getSupportActionBar());
+        //Log.d("TAG_X", " 2: " + getSupportActionBar());
     }
 
     //set up the "homepage" navigation view
@@ -120,22 +142,26 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
     private void setUpDrawer() {
         drawerLayout = findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        drawerAvatar = findViewById(R.id.drawer_imageView);
+        //setAvatar();// for use with setting avatar
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
+
     }
 
-    private void setRV(List<RepoResult> repoResults){
+    private void setRV(List<RepoResult> repoResults) {
         RepoAdapter repoAdapter = new RepoAdapter(repoResults, this);
         repoRecyclerView.setAdapter(repoAdapter);
-        repoRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL, false));
+        repoRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
     }
 
     @Override
     public void clickRepo(String repo) {
-        Toast.makeText(this, repo+"clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, repo + "clicked", Toast.LENGTH_SHORT).show();
 
         Bundle repoBundle = new Bundle();
         repoBundle.putString(Constants.REPO_KEY, repo);
@@ -149,16 +175,18 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
                 .commit();
 
     }
+
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
-        },throwable -> {
-            Log.d("TAG_X", "getRepositories: "+throwable.getMessage());
+            avatarUrl = repoResults.get(0).getOwner().getAvatarUrl();
+            //Log.d("TAG_X", "getRepositories: "+avatarUrl);
+        }, throwable -> {
+            Log.d("TAG_X", "getRepositories: " + throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
 
     }
-
 
 
     @Override

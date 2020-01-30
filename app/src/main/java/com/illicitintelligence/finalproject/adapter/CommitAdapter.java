@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import java.util.TimeZone;
 
 public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitViewHolder>{
     private List<CommitsResult> commits;
-    private Context appContext;
+    private Context context;
 
     public CommitAdapter(List<CommitsResult> commits) {
         this.commits = commits;
@@ -36,7 +38,7 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
     @NonNull
     @Override
     public CommitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        appContext = parent.getContext();
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.commit_item_layout, parent, false);
 
@@ -45,8 +47,13 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
     @Override
     public void onBindViewHolder(@NonNull CommitViewHolder holder, int position) {
-        holder.commitTitleTextView.setText(commits.get(position).getCommit().getMessage());
-        holder.commitDateTextView.setText(commits.get(position).getCommit().getCommitter().getDate() + " hours ago");
+        String message = commits.get(position).getCommit().getMessage();
+
+        if(message.length() > 24)
+            holder.commitTitleTextView.setTextSize(16f);
+
+        holder.commitTitleTextView.setText(message);
+
 
         try{
             holder.commitAuthorTextView.setText(commits.get(position).getCommitter().getLogin());
@@ -58,54 +65,50 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
         }
 
         try{
-            Glide.with(appContext)
+            Glide.with(context)
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(commits.get(position).getCommitter().getAvatarUrl())
                     .into(holder.commitAvatarImageView);
         }catch (Exception e){
-            Glide.with(appContext)
+            Glide.with(context)
                     .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                     .load(Constants.DEFAULT_ICON)
                     .into(holder.commitAvatarImageView);
             Log.d("TAG_X", "onBindViewHolder: "+e.getMessage());
         }
 
-        //compareDates(commits.get(position).getCommit().getCommitter().getDate());
+        holder.commitDateTextView.setText(compareDates(commits.get(position).getCommit().getCommitter().getDate()) + " hours ago");
 
-
+        Animation transition = AnimationUtils.loadAnimation(context, R.anim.transition_animation);
+        holder.itemView.startAnimation(transition);
     }
 
-    private void compareDates(String commitTime){
+    private int compareDates(String commitTimeFull){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS'Z'");
 
-        Date currentDate = new Date();
+        Date currentDateObj = new Date();
+        String currentDateString = format.format(currentDateObj);
 
-        String currentDateString = format.format(currentDate);
-
-
-
+        String commitDateTime[] = commitTimeFull.split("T");
         String currentDateTime[] = currentDateString.split("T");
 
-        Log.d("TAG_X", "compareDates: "+format.format(currentDate)+ ", "+commitTime);
+        String commitDate[] = commitDateTime[0].split("-");
+        String currentDate[] = currentDateTime[0].split("-");
 
+        String commitTime[] = commitDateTime[1].split(":");
+        String currentTime[] = currentDateTime[1].split(":");
 
-        try {
-            Date commitDate = new Date();
-            currentDate = format.parse(format.format(currentDate));
-            Log.d("TAG_X", "compareDates2: "+ currentDate);
-            long diff = currentDate.getTime() - commitDate.getTime();
+        int diffYear = (Integer.parseInt(currentDate[0]) - Integer.parseInt(commitDate[0]));
+        int diffMonth = (Integer.parseInt(currentDate[1]) - Integer.parseInt(commitDate[1]));
+        int diffDay = (Integer.parseInt(currentDate[2]) - Integer.parseInt(commitDate[2]));
 
-            long diffSeconds = diff / 1000 % 60;
-            long diffMinutes = diff / (60 * 1000) % 60;
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            long diffDays = diff / (24 * 60 * 60 * 1000);
+        int diffHour = (Integer.parseInt(currentTime[0]) - Integer.parseInt(commitTime[0]));
 
-            Log.d("TAG_X", "compareDates: "+diffDays+ " days and "+diffHours+" hours ago");
+        int diffTotal = (diffYear*8760) + (diffMonth*730) + (diffDay*24) +diffHour;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Log.d("TAG_X", "compareDates: "+diffTotal);
 
+        return diffTotal;
     }
 
     @Override
