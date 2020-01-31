@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     FrameLayout commits_fragment_layout;
 
 //    @BindView(R.id.textView)
-//    TextView textView;
+    TextView textView;
 //    @BindView(R.id.textView2)
-//    TextView textView2;
+    TextView textView2;
 //    @BindView(R.id.textView3)
-//    TextView textView3;
+    TextView textView3;
 //    @BindView(R.id.drawer_imageView)
     ImageView drawerAvatar;
 
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         //drawerAvatar = findViewById(R.id.drawer_imageView);
 
         setUpToolbar();
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         currentUser = users.get(3);
 
         getRepositories(currentUser);
-        //textView.setText(currentUser);
+        textView.setText(currentUser);
     }
 
     private void setAvatar() {
@@ -146,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     //set up the "homepage" navigation view
     private void setUpNavigationView() {
         navigationView = findViewById(R.id.navi_view);
+        textView = navigationView.getHeaderView(0).findViewById(R.id.textView);
+        textView2 = navigationView.getHeaderView(0).findViewById(R.id.textView2);
+        textView3 = navigationView.getHeaderView(0).findViewById(R.id.textView3);
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
@@ -218,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             Logger.logIt("Added User: " + user);
         }
 
-        //navigationView.invalidate();
+        navigationView.invalidate();
     }
 
     @Override
@@ -227,7 +231,13 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         Toast.makeText(this, "Hire Me:)", Toast.LENGTH_LONG).show();
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
-        //textView.setText(menuItem.toString());
+        textView.setText(menuItem.toString());
+        textView2.setText(menuItem.toString());
+        textView3.setText(menuItem.toString());
+
+        // setting the avatar crashes the app
+        //setAvatar();
+
         getRepositories(menuItem.toString());
         return true;
     }
