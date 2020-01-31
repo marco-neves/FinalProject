@@ -77,10 +77,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
 //    @BindView(R.id.textView)
     TextView textView;
-//    @BindView(R.id.textView2)
-    TextView textView2;
-//    @BindView(R.id.textView3)
-    TextView textView3;
 //    @BindView(R.id.drawer_imageView)
     ImageView drawerAvatar;
 
@@ -158,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private void setUpNavigationView() {
         navigationView = findViewById(R.id.navi_view);
         textView = navigationView.getHeaderView(0).findViewById(R.id.textView);
-        textView2 = navigationView.getHeaderView(0).findViewById(R.id.textView2);
-        textView3 = navigationView.getHeaderView(0).findViewById(R.id.textView3);
         drawerAvatar = findViewById(R.id.drawer_imageView);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -170,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         drawerLayout = findViewById(R.id.drawer);
         //setAvatar();// for use with setting avatar
 
+        textView.setText(currentUser);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
@@ -256,8 +251,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
         textView.setText(menuItem.toString());
-        textView2.setText(menuItem.toString());
-        textView3.setText(menuItem.toString());
 
         currentUser = menuItem.toString();
 
