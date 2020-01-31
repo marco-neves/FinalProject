@@ -22,23 +22,34 @@ public class RepoViewModel extends AndroidViewModel {
     private RetrofitInstance retrofitInstance;
 
     public RepoViewModel(@NonNull Application application) {
-        super( application );
+        super(application);
         retrofitInstance = new RetrofitInstance(this.getApplication().getCacheDir());
     }
 
     public Observable<List<RepoResult>> getMyRepo(String userName) {
         //Logger.logError("TAG_X", "getMyRepo: " + userName);
-        return retrofitInstance.getRepoInstance( userName )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() );
+        return retrofitInstance.getRepoInstance(userName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
+
+    public Observable<List<RepoResult>> getPrivateRepos(String token) {
+        return retrofitInstance.
+                getPrivateRepos(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
 
     public Observable<List<CommitsResult>> getMyCommits(String userName, String repository) {
         return retrofitInstance.
-                getCommitInstance( userName, repository )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() );
+                getCommitInstance(userName, repository)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
+
+
 }
