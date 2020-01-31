@@ -27,7 +27,7 @@ public class RetrofitInstance {
 
     public RetrofitInstance(File cacheDirectory) {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.d("TAG_X", message));
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message ->{}); //Log.d("TAG_X", message));
 
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
