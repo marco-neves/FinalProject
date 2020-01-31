@@ -286,4 +286,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private SharedPreferences getSharePrefInstance() {
         return this.getSharedPreferences(Constants.USERNAME_SHARED_PREFS, Context.MODE_PRIVATE);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
