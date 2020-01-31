@@ -52,8 +52,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.get_started_button)
     public void startMainActivity(){
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
+        Intent signInIntent = new Intent(this, SignInActivity.class);
+        startActivity(signInIntent);
     }
 
     private void startAnimations() {
