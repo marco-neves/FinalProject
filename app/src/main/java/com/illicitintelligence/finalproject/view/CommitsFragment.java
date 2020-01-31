@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,9 +33,13 @@ public class CommitsFragment extends Fragment {
     @BindView(R.id.recyclerView_commits)
     RecyclerView commitsRecyclerView;
 
+    @BindView(R.id.commits_textView)
+    TextView commitsTextView;
+
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private RepoViewModel repoViewModel;
     private String repoTitle;
+    private String currentAuthor;
 
     @Nullable
     @Override
@@ -48,9 +54,12 @@ public class CommitsFragment extends Fragment {
 
         Bundle argumentBundle = getArguments();
         repoTitle = argumentBundle.getString(Constants.REPO_KEY);
+        currentAuthor = argumentBundle.getString(Constants.AUTHOR_KEY);
+
+        commitsTextView.setText(repoTitle +  " Commits");
 
         repoViewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
-        getMyCommits(repoTitle);
+        getMyCommits(currentAuthor, repoTitle);
     }
 
     private void setRV(List<CommitsResult> commitsResults) {
@@ -60,22 +69,17 @@ public class CommitsFragment extends Fragment {
 
     }
 
-    private void getMyCommits(String repoTitle) {
-        compositeDisposable.add( repoViewModel.getMyCommits( repoTitle ).subscribe(
-                new Consumer<List<CommitsResult>>() {
-                    @Override
-                    public void accept(List<CommitsResult> repoResults) throws Exception {
-                        setRV(repoResults);
+    private void getMyCommits(String userName, String repoTitle) {
+        compositeDisposable.add( repoViewModel.getMyCommits( userName, repoTitle ).subscribe(commitsResults -> {
+           setRV(commitsResults);
 
-                        for (int i = 0; i < repoResults.size(); i++) {
-                            Log.d( "TAG_E", "Commits: " + repoResults.get( i ).getCommit().getMessage() );
-                        }
+           // TODO: Check >>24hr<< and if yes: reference sharedPrefs (caching)
+            // if no, fetch the commits again and then cache
 
-
-                    }
-                }
-                )
-        );
+            //Toast.makeText(this.getContext(), "Commits Found", Toast.LENGTH_SHORT).show();
+        }, throwable -> {
+            Toast.makeText(this.getContext(), "No Commits Found for " + repoTitle, Toast.LENGTH_SHORT).show();
+        }));
     }
 
 }

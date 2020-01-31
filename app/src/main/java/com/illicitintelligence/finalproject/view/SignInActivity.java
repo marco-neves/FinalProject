@@ -43,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_sign_in );
+        setContentView( R.layout.sign_in_activity );
 
         login();
     }
@@ -103,12 +104,34 @@ public class SignInActivity extends AppCompatActivity {
 
                                 }
                             } )
+                    .addOnSuccessListener(
+                    new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            // User gis signed in.
+                            // IdP data available in
+                            // authResult.getAdditionalUserInfo().getProfile().
+                            // The OAuth access token can also be retrieved:
+                            // authResult.getCredential().getAccessToken().
+
+                            OAuthCredential credential = (OAuthCredential) authResult.getCredential();
+                            Log.d( TAG, "onSuccess: Regular task: " + credential.getAccessToken() );
+                            intent.putExtra( "AccessToken", credential.getAccessToken() );
+                            startActivity( intent );
+
+                        }
+                    } )
                     .addOnFailureListener(
                             new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     // Handle failure.
                                     Log.d( TAG, "onFailure: RegularFailure: " + e.getMessage() );
+                                    Boolean privateRepo = false;
+
+                                    intent.putExtra("isPrivate", privateRepo);
+
+                                    startActivity(intent);
                                 }
                             } );
         }

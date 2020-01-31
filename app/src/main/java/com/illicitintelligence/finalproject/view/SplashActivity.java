@@ -52,8 +52,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.get_started_button)
     public void startMainActivity(){
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
+        Intent signInIntent = new Intent(this, SignInActivity.class);
+        startActivity(signInIntent);
     }
 
     private void startAnimations() {
@@ -75,7 +75,7 @@ public class SplashActivity extends AppCompatActivity {
         darkoFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_darkat);
 
         // Bouncing animation
-        bouncer.setDuration(4000);
+        bouncer.setDuration(2000);
         octocatImg.setAnimation(bouncer);
         logoTextView.setAnimation(bouncer);
 
