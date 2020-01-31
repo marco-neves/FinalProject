@@ -20,13 +20,9 @@ import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.util.Constants;
 import com.illicitintelligence.finalproject.util.Logger;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitViewHolder>{
     private List<CommitsResult> commits;
@@ -127,10 +123,10 @@ public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitView
 
         public CommitViewHolder(@NonNull View itemView) {
             super(itemView);
-            commitTitleTextView = itemView.findViewById(R.id.commits_title_textview);
-            commitAuthorTextView = itemView.findViewById(R.id.commits_author_textview);
-            commitDateTextView = itemView.findViewById(R.id.commits_date_textview);
-            commitAvatarImageView = itemView.findViewById(R.id.commits_avatar_imageview);
+            commitTitleTextView = itemView.findViewById(R.id.textView3);
+            commitAuthorTextView = itemView.findViewById(R.id.textView);
+            commitDateTextView = itemView.findViewById(R.id.textView2);
+            commitAvatarImageView = itemView.findViewById(R.id.drawer_imageView);
         }
 
     }
