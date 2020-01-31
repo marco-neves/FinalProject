@@ -120,8 +120,14 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         currentUser = users.get(0);
 
-        //getRepositories(currentUser);
-        getPrivateRepositories(accessToken);
+
+        if (getIntent().getBooleanExtra("isPrivate", true)){
+            getPrivateRepositories(accessToken);
+
+        }else{
+            getRepositories(currentUser);
+        }
+
       
         //textView.setText(currentUser);
     }
@@ -154,13 +160,14 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         textView = navigationView.getHeaderView(0).findViewById(R.id.textView);
         textView2 = navigationView.getHeaderView(0).findViewById(R.id.textView2);
         textView3 = navigationView.getHeaderView(0).findViewById(R.id.textView3);
+        drawerAvatar = findViewById(R.id.drawer_imageView);
         navigationView.setNavigationItemSelectedListener(this);
+
         setUpDrawer();
     }
 
     private void setUpDrawer() {
         drawerLayout = findViewById(R.id.drawer);
-        drawerAvatar = findViewById(R.id.drawer_imageView);
         //setAvatar();// for use with setting avatar
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -238,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             Logger.logIt("Added User: " + user);
         }
 
+//        setAvatar();
         navigationView.invalidate();
     }
 
@@ -251,9 +259,13 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         textView2.setText(menuItem.toString());
         textView3.setText(menuItem.toString());
 
+        currentUser = menuItem.toString();
+
         // setting the avatar crashes the app
         //setAvatar();
         getRepositories(menuItem.toString());
+
+        drawerLayout.closeDrawers();
         return true;
     }
 
