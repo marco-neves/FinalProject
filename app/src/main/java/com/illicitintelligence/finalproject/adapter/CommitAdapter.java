@@ -20,13 +20,9 @@ import com.illicitintelligence.finalproject.model.CommitsResult;
 import com.illicitintelligence.finalproject.util.Constants;
 import com.illicitintelligence.finalproject.util.Logger;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class CommitAdapter extends RecyclerView.Adapter<CommitAdapter.CommitViewHolder>{
     private List<CommitsResult> commits;

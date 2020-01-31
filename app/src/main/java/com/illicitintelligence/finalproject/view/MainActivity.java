@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,8 +38,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-
 public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
     ArrayList<String> users = new ArrayList<String>() {{
@@ -75,7 +74,15 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.commit_framelayout)
     FrameLayout commits_fragment_layout;
 
+//    @BindView(R.id.textView)
+//    TextView textView;
+//    @BindView(R.id.textView2)
+//    TextView textView2;
+//    @BindView(R.id.textView3)
+//    TextView textView3;
+//    @BindView(R.id.drawer_imageView)
     ImageView drawerAvatar;
+
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        drawerAvatar = findViewById(R.id.drawer_imageView);
+        //drawerAvatar = findViewById(R.id.drawer_imageView);
 
         setUpToolbar();
 
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         currentUser = users.get(3);
 
         getRepositories(currentUser);
+        //textView.setText(currentUser);
     }
 
     private void setAvatar() {
@@ -214,17 +222,13 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.logIt("MenuItem: " + item.toString());
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //TODO: refresh the UI based on the user selected.
+        Toast.makeText(this, "Hire Me:)", Toast.LENGTH_LONG).show();
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
+        //textView.setText(menuItem.toString());
+        getRepositories(menuItem.toString());
         return true;
     }
 
