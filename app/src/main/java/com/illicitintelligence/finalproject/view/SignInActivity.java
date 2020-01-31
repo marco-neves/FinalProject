@@ -94,6 +94,7 @@ public class SignInActivity extends AppCompatActivity {
                             // authResult.getAdditionalUserInfo().getProfile().
                             // The OAuth access token can also be retrieved:
                             // authResult.getCredential().getAccessToken().
+
                             OAuthCredential credential = (OAuthCredential) authResult.getCredential();
                             Log.d( TAG, "onSuccess: Regular task: " + credential.getAccessToken() );
                             intent.putExtra( "AccessToken", credential.getAccessToken() );
@@ -107,6 +108,11 @@ public class SignInActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     // Handle failure.
                                     Log.d( TAG, "onFailure: RegularFailure: " + e.getMessage() );
+                                    Boolean privateRepo = false;
+
+                                    intent.putExtra("isPrivate", privateRepo);
+
+                                    startActivity(intent);
                                 }
                             } );
         }

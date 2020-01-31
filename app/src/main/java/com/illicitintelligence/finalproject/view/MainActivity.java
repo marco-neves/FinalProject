@@ -122,12 +122,16 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         currentUser = users.get(0);
 
-        //getRepositories(currentUser);
-        getPrivateRepositories(accessToken);
 
+        if (getIntent().getBooleanExtra("isPrivate", true)){
+            getPrivateRepositories(accessToken);
+
+        }else{
+            getRepositories(currentUser);
+        }
+
+      
         //textView.setText(currentUser);
-        getRepositories(currentUser);
-        textView.setText(currentUser);
     }
 
     private void setAvatar() {
@@ -158,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         textView = navigationView.getHeaderView(0).findViewById(R.id.textView);
         textView2 = navigationView.getHeaderView(0).findViewById(R.id.textView2);
         textView3 = navigationView.getHeaderView(0).findViewById(R.id.textView3);
+        drawerAvatar = findViewById(R.id.drawer_imageView);
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
@@ -242,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             Logger.logIt("Added User: " + user);
         }
 
-        //navigationView.invalidate();
+//        setAvatar();
         navigationView.invalidate();
     }
 
@@ -252,14 +257,17 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         Toast.makeText(this, "Hire Me:)", Toast.LENGTH_LONG).show();
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
-        //textView.setText(menuItem.toString());
         textView.setText(menuItem.toString());
         textView2.setText(menuItem.toString());
         textView3.setText(menuItem.toString());
 
+        currentUser = menuItem.toString();
+
         // setting the avatar crashes the app
         //setAvatar();
         getRepositories(menuItem.toString());
+
+        drawerLayout.closeDrawers();
         return true;
     }
 
