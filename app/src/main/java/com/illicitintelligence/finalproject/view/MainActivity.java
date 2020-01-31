@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,8 +39,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-
 public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
     ArrayList<String> users = new ArrayList<String>() {{
@@ -76,7 +75,15 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @BindView(R.id.commit_framelayout)
     FrameLayout commits_fragment_layout;
 
+//    @BindView(R.id.textView)
+    TextView textView;
+//    @BindView(R.id.textView2)
+    TextView textView2;
+//    @BindView(R.id.textView3)
+    TextView textView3;
+//    @BindView(R.id.drawer_imageView)
     ImageView drawerAvatar;
+
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -113,9 +120,10 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
         currentUser = users.get(0);
 
-
         //getRepositories(currentUser);
         getPrivateRepositories(accessToken);
+      
+        //textView.setText(currentUser);
     }
 
     private void setAvatar() {
@@ -143,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     //set up the "homepage" navigation view
     private void setUpNavigationView() {
         navigationView = findViewById(R.id.navi_view);
+        textView = navigationView.getHeaderView(0).findViewById(R.id.textView);
+        textView2 = navigationView.getHeaderView(0).findViewById(R.id.textView2);
+        textView3 = navigationView.getHeaderView(0).findViewById(R.id.textView3);
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
@@ -227,21 +238,22 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             Logger.logIt("Added User: " + user);
         }
 
-        //navigationView.invalidate();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.logIt("MenuItem: " + item.toString());
-
-        return super.onOptionsItemSelected(item);
+        navigationView.invalidate();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //TODO: refresh the UI based on the user selected.
+        Toast.makeText(this, "Hire Me:)", Toast.LENGTH_LONG).show();
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
+        textView.setText(menuItem.toString());
+        textView2.setText(menuItem.toString());
+        textView3.setText(menuItem.toString());
+
+        // setting the avatar crashes the app
+        //setAvatar();
+        getRepositories(menuItem.toString());
         return true;
     }
 
