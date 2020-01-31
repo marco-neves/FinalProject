@@ -41,20 +41,12 @@ import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoDelegate, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "MainActivity";
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private RepoViewModel viewModel;
-    private CommitsFragment commitsFragment = new CommitsFragment();
-
     ArrayList<String> users = new ArrayList<String>() {{
         add("GermL");
         add("Joel-Jacob");
         add("marco-neves");
         add("moniqueberry88");
     }};
-
-    private String currentUser = "";
-    private String avatarUrl = "";
 
     @BindView(R.id.recyclerView_repos)
     RecyclerView repoRecyclerView;
@@ -90,21 +82,12 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private ActionBarDrawerToggle toggle;
     private StringBuilder sb = new StringBuilder();
     private String tempUsers;
-    private SharedPreferences userSharedPref;
-    private SharedPreferences.Editor editor;
-
-    public void saveToSharedPreference(String key, String users) {
-        editor = userSharedPref.edit();
-        editor.putString(key, users);
-        editor.apply();
-    }
-
-    // this method is to be called if we're within 24hr of the last api call
-    public String fetchFromSharedPreference(String key) {
-        if(userSharedPref.contains(key))
-            return "";
-        return userSharedPref.getString(key, getString(R.string.default_user_value));
-    }
+    //private static final String TAG = "MainActivity";
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private RepoViewModel viewModel;
+    private CommitsFragment commitsFragment = new CommitsFragment();
+    private String currentUser = "";
+    private String avatarUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +95,11 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        drawerAvatar = findViewById(R.id.drawer_imageView);
+
         setUpToolbar();
 
-        userSharedPref = this.getSharedPreferences(Constants.USERNAME_SHARED_PREFS, Context.MODE_PRIVATE);
-
-        if (!userSharedPref.contains(Constants.USER_PREF_KEY)) {
-            translateArrayList();
-        }
+        if (!getSharePrefInstance().contains(Constants.USER_PREF_KEY)) {translateArrayList();}
         else {
             tempUsers = fetchFromSharedPreference(Constants.USER_PREF_KEY);
             populateMenuOptions(tempUsers);
@@ -157,9 +138,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     //set up the "homepage" navigation view
     private void setUpNavigationView() {
         navigationView = findViewById(R.id.navi_view);
-
-        // TODO: here we have to make sure we already dynamically add in the users.
-
         navigationView.setNavigationItemSelectedListener(this);
         setUpDrawer();
     }
@@ -176,9 +154,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
     }
     private void translateArrayList() {
-        //TODO: check if the sharepreferences is null
         for (int i = 0; i < users.size() ; i++) {
-            //TODO: add users from arrayList to sharedpreferences
             sb.append(users.get(i)).append(",");
         }
         tempUsers = sb.toString();
@@ -225,18 +201,16 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
     public void populateMenuOptions(String myUsers){
         Menu menu = navigationView.getMenu();
-        Menu submenu = menu.addSubMenu("Current Users:");
-
         // reference the names in sharedpreferences
         String[] userList = myUsers.split(",");
 
         // reference the names in sharedpreferences
         for(String user: userList){
-            submenu.add(user);
+            menu.add(user);
             Logger.logIt("Added User: " + user);
         }
 
-        navigationView.invalidate();
+        //navigationView.invalidate();
     }
 
     @Override
@@ -249,6 +223,24 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //TODO: refresh the UI based on the user selected.
-        return false;
+        Logger.logIt("MenuItem 2nd: " + menuItem.toString());
+
+        return true;
+    }
+
+    public void saveToSharedPreference(String key, String users) {
+        getSharePrefInstance()
+                .edit()
+                .putString(key, users)
+                .apply();
+    }
+
+    // this method is to be called if we're within 24hr of the last api call
+    public String fetchFromSharedPreference(String key) {
+        return !getSharePrefInstance().contains(key) ? "" : getSharePrefInstance().getString(key, getString(R.string.default_user_value));
+    }
+
+    private SharedPreferences getSharePrefInstance() {
+        return this.getSharedPreferences(Constants.USERNAME_SHARED_PREFS, Context.MODE_PRIVATE);
     }
 }
