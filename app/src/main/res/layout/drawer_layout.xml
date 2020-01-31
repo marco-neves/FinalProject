@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
+    android:id="@+id/card_navi_view"
     app:cardBackgroundColor="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +51,7 @@
             tools:text="5 hours ago" />
 
         <TextView
-            android:id="@+id/r"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
