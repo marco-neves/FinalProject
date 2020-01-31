@@ -3,6 +3,7 @@ package com.illicitintelligence.finalproject.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private CommitsFragment commitsFragment = new CommitsFragment();
     private String currentUser = "";
     private String avatarUrl = "";
+    private String accessToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        //drawerAvatar = findViewById(R.id.drawer_imageView);
+        drawerAvatar = findViewById(R.id.drawer_imageView);
+        accessToken = getIntent().getStringExtra("AccessToken");
 
         setUpToolbar();
 
@@ -115,10 +118,12 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         //TODO ADD LOGIN IMPLEMENTATION
 
         viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
-        currentUser = users.get(3);
+        currentUser = users.get(0);
 
-        getRepositories(currentUser);
-        textView.setText(currentUser);
+        //getRepositories(currentUser);
+        getPrivateRepositories(accessToken);
+      
+        //textView.setText(currentUser);
     }
 
     private void setAvatar() {
@@ -204,10 +209,22 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
     private void getRepositories(String user) {
         compositeDisposable.add(viewModel.getMyRepo(user).subscribe(repoResults -> {
             setRV(repoResults);
+            avatarUrl = repoResults.get(0).getOwner().getAvatarUrl();
+            Log.d("TAG_X", "getRepositories: "+avatarUrl);
         }, throwable -> {
             Logger.logIt(""+throwable.getMessage());
             Toast.makeText(this, "Repos not available for " + user, Toast.LENGTH_SHORT).show();
         }));
+    }
+
+    private void getPrivateRepositories(String token){
+        compositeDisposable.add( viewModel.getPrivateRepos( token ).subscribe(repoResults -> {
+            setRV(repoResults);
+        }, throwable -> {
+            Log.d( "TAG", "getAccess: " + throwable.getMessage() );
+            Toast.makeText(this, "Repos not available for " , Toast.LENGTH_SHORT).show();
+        }));
+
     }
 
     public void populateMenuOptions(String myUsers){

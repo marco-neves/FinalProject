@@ -65,4 +65,8 @@ public class RetrofitInstance {
     public Observable<List<CommitsResult>> getCommitInstance(String userName, String repository) {
         return service.getCommitService( userName, repository );
     }
+
+    public Observable<List<RepoResult>> getPrivateRepos(String token){
+        return service.getPrivateRepos(token);
+    }
 }
