@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
     @Override
     public void clickRepo(String repo) {
-        Toast.makeText(this, repo + "clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, repo + "clicked", Toast.LENGTH_SHORT).show();
 
         Bundle repoBundle = new Bundle();
         repoBundle.putString(Constants.REPO_KEY, repo);
@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.card_flip_in_left, R.anim.card_flip_out_left)
                 .add(R.id.commit_framelayout, commitsFragment)
                 .addToBackStack(commitsFragment.getTag())
                 .commit();
