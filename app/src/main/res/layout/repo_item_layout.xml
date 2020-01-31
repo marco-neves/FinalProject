@@ -19,6 +19,7 @@
             android:layout_margin="16dp"
             android:layout_marginStart="8dp"
             android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="24sp"
             android:fontFamily="@font/spacemono_bold"
             android:gravity="center"
             android:textSize="20sp"
