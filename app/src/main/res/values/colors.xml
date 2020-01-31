@@ -5,4 +5,5 @@
     <color name="dark">#000000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="metallic_grey">#a8a9ad</color>
+    <color name="bright_white">#FBFCFC</color>
 </resources>
