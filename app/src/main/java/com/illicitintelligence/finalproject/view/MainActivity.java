@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
         //drawerAvatar = findViewById(R.id.drawer_imageView);
 
         setUpToolbar();
@@ -237,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
 
         // setting the avatar crashes the app
         //setAvatar();
-
         getRepositories(menuItem.toString());
         return true;
     }
