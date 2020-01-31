@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
             Logger.logIt("Added User: " + user);
         }
 
+        //navigationView.invalidate();
         navigationView.invalidate();
     }
 
@@ -251,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements RepoAdapter.RepoD
         Toast.makeText(this, "Hire Me:)", Toast.LENGTH_LONG).show();
         Logger.logIt("MenuItem 2nd: " + menuItem.toString());
 
+        //textView.setText(menuItem.toString());
         textView.setText(menuItem.toString());
         textView2.setText(menuItem.toString());
         textView3.setText(menuItem.toString());
